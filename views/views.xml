@@ -1,0 +1,101 @@
+<odoo>
+    <data>
+        <record id="view_order_form_with_carrier" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position='after'>
+                    <field name="coupon_got" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.ui.view" id="res_partner_view">
+            <field name="name">Res Partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="refer_partner" invisible="0" readonly="1" force_save="1" string="Referral Code"/>
+                    <field name="refer_url" invisible="0" widget="CopyClipboardText" readonly="1" force_save="1"
+                           string="Referral URL"/>
+                    <field name="referred_by" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.sale</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="10"/>
+            <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='proforma_configuration']/.." position="after">
+                    <h2>Customer Registration Referral Coupon Settings</h2>
+                    <div class="row mt16 o_settings_container" name="registration_referral_coupon">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="program_active" class="w-100"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="program_active"
+                                       string="Activate Coupon Program"
+                                       class="w-100"/>
+                                <button attrs="{'invisible':[('program_active','=',False)]}" string="Notify"
+                                        name="coupon_program_send_mail" type="object"
+                                        class="btn-primary"/>
+                                <div class="text-muted">
+                                    Activate the coupon program. <br/>
+                                    Click to 'Notify' button to send a notification mail about coupon program is activated
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible':[('program_active','=',False)]}">
+                            <div class="o_setting_left_pane">
+                                <field name="not_immediate_get_referring_partner" class="w-100"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="not_immediate_get_referring_partner"
+                                       class="w-100" string="Give coupon after first order of new user"/>
+                                <div class="text-muted">
+                                    Whoever refer the code will get coupon after the first order by new user.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible':[('program_active','=',False)]}">
+                            <div class="o_setting_left_pane">
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="old_partner_coupon_rule_id"
+                                       string="Coupon program for code referring partner"
+                                       class="w-100"/>
+                                <field name="old_partner_coupon_rule_id" class="w-100"  attrs="{'required':[('program_active','=',True)]}"/>
+                                <div class="text-muted">
+                                    Select a Coupon program for code referring partner.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible':[('program_active','=',False)]}">
+                            <div class="o_setting_left_pane">
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="new_partner_coupon_rule_id"
+                                       string="Coupon program for new partner"
+                                       class="w-100"/>
+                                <field name="new_partner_coupon_rule_id" class="w-100" attrs="{'required':[('program_active','=',True)]}"/>
+                                <div class="text-muted">
+                                    Select a Coupon program for new partner.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,290 @@
+<odoo>
+    <data>
+        <template id="inherit_assets_frontend" inherit_id="website.assets_frontend">
+            <xpath expr="link[last()]" position="after">
+                <link type="text/css" rel="stylesheet"
+                      href="/website_registration_referral_coupon/static/src/css/style.css"/>
+            </xpath>
+            <xpath expr="script[last()]" position="after">
+                <script type="text/javascript" src="/website_registration_referral_coupon/static/src/js/script.js"/>
+            </xpath>
+        </template>
+
+        <template id="fields" inherit_id="auth_signup.fields" name="Referral auth_signup">
+            <xpath expr="//div[hasclass('form-group','field-confirm_password')]" position="after">
+                  <t t-set="ircsudo" t-value="request.env['ir.config_parameter'].sudo()"/>
+                 <t t-set="program_active"
+                       t-value="ircsudo.get_param('website_registration_referral_coupon.program_active')"/>
+                <div t-if="bool(program_active)" class="form-group  field-login-ref{{'' if bool(program_active) else ' d-none'}}">
+
+
+                    <label t-attf-class="label-optional{{'' if bool(program_active) else 'd-none'}}" for="refer_partner">Referral
+                        Code
+                    </label> <i style="cursor: pointer;" class="fa fa-info-circle" id="referral_info"  tabindex="0"/>
+                    <input type="text" name="refer_partner" t-att-value="pr if bool(program_active) else  ''"
+                           id="refer_partner"
+                           t-att-readonly="'readonly' if pr else None"
+                           t-attf-class="form-control form-control-sm{{'' if bool(program_active) else ' oe_np d-none'}}"/>
+                     <div class="alert alert-danger mt-3 mb-0 d-none" id="refer_partner_error">
+                        <small>
+                            <i class="fa fa-exclamation-triangle"/>
+                            <em>
+                                Invalid Referral Code! You will not get any reward.
+                            </em>
+                        </small>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="s_popup" name="Popup">
+            <div class="s_popup o_snippet_invisible" data-vcss="001">
+                <div class="modal fade s_popup_middle"
+                     style="background-color: var(--black-50) !important;"
+                     data-show-after="5"
+                     data-display="afterDelay"
+                     data-consents-duration="7"
+                     data-focus="false"
+                     data-backdrop="false"
+                     tabindex="-1"
+                     role="dialog">
+                    <div class="modal-dialog d-flex">
+                        <div class="modal-content oe_structure">
+                            <div class="s_popup_close js_close_popup o_we_no_overlay o_not_editable">&amp;times;</div>
+                            <section class="s_banner oe_img_bg pt96 pb96"
+                                     data-snippet="s_banner"
+                                     style="background-image: url('/web/image/website.s_popup_default_image');">
+                                <div class="container">
+                                    <div class=" s_nb_column_fixed">
+                                        <div class=" text-center o_cc o_cc1 jumbotron py-3">
+                                            <video playsinline="true" autoplay="true" muted="true" loop="true"
+                                                   style="width: 100%;"
+                                                   class="" poster="/web/image/5016" preload="auto">
+                                                <source src="/website_registration_referral_coupon/static/assets/congratulations.mp4"
+                                                        type="video/mp4"/>
+                                            </video>
+                                            <div style="" class="details_block">
+                                                <div class="h_1 mb-3" style="line-height: 20px;">
+                                                    <div t-esc="request.env.user.partner_id.name"/>
+                                                </div>
+                                                <hr class="my-1"/>
+                                                <div class="h_2 p-2">
+                                                    <div class="h_4 mb-0">You got a coupon of</div>
+                                                    <div class="font-weight-bold">
+                                                        <t t-esc="coupon_rule_id.name"/>
+                                                    </div>
+                                                    <div class="h_4 mb-0">on your signup with referral code</div>
+                                                </div>
+                                                <hr class="my-1"/>
+                                                <a href="/shop" class="btn btn-primary h_3">Order Now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <t t-esc="user_id.partner_id.first_login()"/>
+        </template>
+
+        <template id="pay_meth_link" inherit_id="portal.portal_layout">
+            <xpath expr="//div[@id='o_my_sidebar']" position="inside">
+                <t t-set="ircsudo" t-value="request.env['ir.config_parameter'].sudo()"/>
+                <t t-set="old_partner_coupon_rule_id"
+                   t-value="ircsudo.get_param('website_registration_referral_coupon.old_partner_coupon_rule_id')"/>
+                <t t-set="new_partner_coupon_rule_id"
+                   t-value="ircsudo.get_param('website_registration_referral_coupon.new_partner_coupon_rule_id')"/>
+                <t t-set="after_first_order"
+                   t-value="ircsudo.get_param('website_registration_referral_coupon.not_immediate_get_referring_partner')"/>
+                <t t-set="old_partner_coupon_rule_id"
+                   t-value="request.env['coupon.program'].sudo().search([('id','=',old_partner_coupon_rule_id)])"/>
+                <t t-set="new_partner_coupon_rule_id"
+                   t-value="request.env['coupon.program'].sudo().search([('id','=',new_partner_coupon_rule_id)])"/>
+                <t t-set="program_active"
+                   t-value="ircsudo.get_param('website_registration_referral_coupon.program_active')"/>
+                <div t-if="not bool(program_active)" class="o_portal_my_security mt-3">
+                    <div class="alert alert-warning">
+                        Referral coupon program is temporarily inactive due to some reasons. You will be notified when
+                        activated.
+                    </div>
+                </div>
+                <div t-if="bool(program_active)" class="o_portal_my_security mt-3">
+                    <h5>Referral Code:
+                        <t t-esc="user_id.partner_id.refer_partner"/>
+                    </h5>
+                    <hr class="mt-1 mb-1"/>
+                    <a t-att-href="user_id.partner_id.refer_url">
+                        Referral Link
+                    </a>
+                    <a t-att-href="user_id.partner_id.refer_url" class="copy_link_url d-none" id="copy_link_url">
+                        <t t-esc="user_id.partner_id.refer_url"/>
+                    </a>
+                    <i id="copy_link" class="btn fa fa-copy copy_link  px-2 h5" title="Copy Link"/>
+                </div>
+                <div t-if="bool(program_active)">
+                    <button type="button" class="btn btn-primary px-1 py-0 m-1 fa fa-pencil" data-toggle="modal"
+                            data-target="#edit_ref_reg_code">
+                        Edit Referral Code
+                    </button>
+                    <div class="modal fade" id="edit_ref_reg_code" tabindex="-1" role="dialog"
+                         aria-labelledby="Edit registration reference code">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content mt-5">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Edit Referral Code</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span>x</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form t-attf-action="/edit-referral-code" class="needs-validation"
+                                          enctype="multipart/form-data"
+                                          method="post" targate="_blank">
+                                        <style>.pen{pointer-events: none;}</style>
+                                        <div class="form-row justify-content-between">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div id="msg_area" class="">
+                                                    </div>
+                                                    <div class="row col-form-label mx-2">
+                                                        <input type="text" class="form-control col-7" id="reg_ref_code"
+                                                               name="reg_ref_code"
+                                                               t-att-value="user_id.partner_id.refer_partner"/>
+                                                        <div class="col-4" style="align-self: center;">
+                                                            <a href="#"
+                                                               class="btn btn-primary m-auto check_availability d-block py-0 px-1 ">
+                                                                Check
+                                                                Availability
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="float-right">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="submit" value="submit" id="submit" class="btn btn-primary pen"
+                                                    disabled="disabled">Submit
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <t t-set="coupon_id"
+                       t-value="request.env['coupon.coupon'].sudo().search([('partner_id','=',user_id.partner_id.id)])"/>
+                    <t t-if="user_id.partner_id.is_first_login and coupon_id"
+                       t-call="website_registration_referral_coupon.s_popup">
+                        <t t-set="coupon_rule_id" t-value="old_partner_coupon_rule_id"/>
+                    </t>
+                    <div class="modal fade" id="ref_notification" tabindex="-1" role="dialog"
+                         aria-labelledby="Registration reference notification">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content mt-5">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Notification</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span>x</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div t-if="bool(program_active)" class="alert alert-info">
+                    <small>
+                        <b>Refer &amp; Earn</b>
+                        <div>
+                            <i>You will get:
+                                <b>
+                                    <t t-esc="old_partner_coupon_rule_id.name"/>
+                                    coupon
+                                </b>
+                            </i>
+                        </div>
+                        <div>
+                            <i>New User will get:
+                                <b>
+                                    <t t-esc="new_partner_coupon_rule_id.name"/>
+                                    coupon
+                                </b>
+                            </i>
+                        </div>
+                        <div style="color :red;" t-if="bool(after_first_order)">
+                            <sup>*</sup>
+                            <i>You will get coupon after the first order of new user.
+                            </i>
+                        </div>
+                    </small>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="portal_my_home_referral_coupon" name="Portal My Home : Referral Coupon"
+                  inherit_id="portal.portal_my_home">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Coupons</t>
+                    <t t-set="url" t-value="'/my/ref-coupons'"/>
+                    <t t-set="placeholder_count" t-value="'coupon_count'"/>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="portal_my_coupons" name="Coupons">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Coupons</t>
+                </t>
+                <t t-set="order" t-value="request.website.sale_get_order()"/>
+                <t t-set="userid" t-value="request.env['res.users'].search([('id','=',request.uid)])"/>
+                <t t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Coupon number</th>
+                            <th>Expire Date</th>
+                            <th>Order(Used in)</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-if="not coupon_ids" class="active">
+                            <td>
+                                You don't have any coupon!
+                            </td>
+                        </tr>
+                        <t t-foreach="coupon_ids" t-as="coupon_id">
+                            <tr t-attf-class="{{'active' if coupon_id.state !='used' else 'text-muted'}}">
+                                <td>
+                                   <i class="btn fa fa-copy copy_link px-1 py-0" title="Copy Code"/> <i class="copy_text" t-esc="coupon_id.code"/>
+                                </td>
+                                <td>
+                                    <span t-field="coupon_id.expiration_date"/>
+                                </td>
+                                <td>
+                                    <a t-if="coupon_id.sales_order_id"
+                                       t-attf-href="{{coupon_id.sales_order_id.get_portal_url()}}"
+                                       t-att-title="coupon_id.sales_order_id.name">
+                                        <t t-esc="coupon_id.sales_order_id.name"/>
+                                    </a>
+                                </td>
+                                <td>
+                                    <span t-field="coupon_id.state"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,203 @@
+
+.details_block{
+position: absolute;
+top: 15vw;
+left: 0;
+width: 100%;
+}
+.oe_np{
+pointer-events:none;
+}
+.h_1{
+font-size:3vw;
+}
+.h_2{
+font-size:2vw !important;
+}
+.h_3{
+font-size:1.6vw !important;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 4000px){
+.details_block{
+position: absolute;
+top: 5vw;
+left: 0;
+width: 100%;
+}
+.h_1{
+font-size:1.5vw;
+}
+.h_2{
+font-size:.9vw !important;
+}
+.h_3{
+font-size:.6vw !important;
+}
+
+}
+@media only screen and (max-width: 3500px){
+.details_block{
+position: absolute;
+top: 5.5vw;
+left: 0;
+width: 100%;
+}
+.h_1{
+font-size:1.8vw;
+}
+.h_2{
+font-size:1vw !important;
+}
+.h_3{
+font-size:.8vw !important;
+}
+
+}
+@media only screen and (max-width: 3000px){
+.details_block{
+position: absolute;
+top: 8vw;
+left: 0;
+width: 100%;
+}
+.h_1{
+font-size:2vw;
+}
+.h_2{
+font-size:1vw !important;
+}
+.h_3{
+font-size:.9vw !important;
+}
+
+}
+@media only screen and (max-width: 2400px){
+.details_block{
+position: absolute;
+top: 8vw;
+left: 0;
+width: 100%;
+}
+.h_1{
+font-size:2.5vw;
+}
+.h_2{
+font-size:1.5vw !important;
+}
+.h_3{
+font-size:1.1vw !important;
+}
+@media only screen and (max-width: 2100px){
+.details_block{
+position: absolute;
+top: 9vw;
+left: 0;
+width: 100%;
+}
+.h_1{
+font-size:2.5vw;
+}
+.h_2{
+font-size:1.5vw !important;
+}
+.h_3{
+font-size:1.1vw !important;
+}
+
+}
+@media only screen and (max-width: 1800px){
+.details_block{
+position: absolute;
+top: 10vw;
+left: 0;
+width: 100%;
+}
+.h_1{
+font-size:3vw;
+}
+.h_2{
+font-size:2vw !important;
+}
+.h_3{
+font-size:1.6vw !important;
+}
+
+}
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 1500px){
+.details_block{
+position: absolute;
+top: 12vw;
+left: 0;
+width: 100%;
+}
+.h_1{
+font-size:3vw;
+}
+.h_2{
+font-size:2vw !important;
+}
+.h_3{
+font-size:1.6vw !important;
+}
+
+}
+@media only screen and (max-width: 1050px){
+.details_block{
+position: absolute;
+top: 17vw;
+left: 0;
+width: 100%;
+}
+.h_1{
+font-size:4.5vw;
+}
+.h_2{
+font-size:3.6vw !important;
+}
+.h_3{
+font-size:2.6vw !important;
+}
+
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 769px){
+.details_block{
+position: absolute;
+    top: 22vw;
+    left: 0;
+    width: 100%;
+}
+.h_1{
+font-size:4.5vw;
+}
+.h_2{
+font-size:3.5vw !important;
+}
+.h_3{
+font-size:2.6vw !important;
+}
+
+}
+
+@media only screen and (max-width: 450px){
+.details_block{
+position: absolute;
+    top: 24vw;
+    left: 0;
+    width: 100%;
+}
+.h_1{
+font-size:4.5vw;
+}
+.h_2{
+font-size:3.5vw !important;
+}
+.h_3{
+font-size:2.6vw !important;
+}
+
+}
